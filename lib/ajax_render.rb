@@ -13,11 +13,25 @@
 # limitations under the License.
 
 require 'coffee-script'
+require 'ajax_render/renderer'
+require 'ajax_render/engine'
+require 'ajax_render/version'
 
 module AjaxRender
+  
+  class << self
+    def config
+      @config ||= Configuration.new
+    end
+  end
+  
+  class Helpers
+    include ActionView::Helpers::JavaScriptHelper
+    def self.escape_js( text )
+      @instance ||= self.new
+      return @instance.escape_javascript( text )
+    end
+  end
 
 end
 
-if defined?(Rails)
-  require 'ajax_render/engine'
-end
