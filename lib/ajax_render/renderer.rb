@@ -13,9 +13,11 @@
 # limitations under the License
 
 ActionController::Renderers.add :ajax do |obj, options|
-  output = {}
-  output[:html] = render_to_string( obj )
-  output[:flash] = flash.map { |f| render_to_string( :partial => 'shared/flash', :locals => { :name => f[0], :message => f[1] } ) }
-  output[:selector] = options[:to]
+  output =  { 
+              html:     render_to_string( obj ),
+              flash:    flash.map { |f| render_to_string( :partial => 'shared/flash', :locals => { :name => f[0], :message => f[1] } ) },
+              target:   options[:target],
+              params:   params
+            }
   send_data output.to_json, :type => Mime::JSON
 end
