@@ -13,6 +13,9 @@
 # limitations under the License
 
 ActionController::Renderers.add :ajax do |obj, options|
-  render_text = AjaxRender::Helpers.escape_js(obj)
-  send_data "$('#{options[:to]}').html('#{render_text}')", :type => Mime::JS
+  output = {}
+  output[:html] = render_to_string( obj )
+  output[:flash] = flash.map { |f| render_to_string( :partial => 'shared/flash', :locals => { :name => f[0], :message => f[1] } ) }
+  output[:selector] = options[:to]
+  send_data output.to_json, :type => Mime::JSON
 end
