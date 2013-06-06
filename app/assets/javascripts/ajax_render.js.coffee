@@ -10,20 +10,25 @@ class AjaxRender
   do_success: (e, object) =>
     console.log "Ajax Render success", e, object
     @render_flash flash, object.selector for flash in object.flash
-    $el = $(object.html)
-    $target = $( @get_ajax_target(e,object) )
-    $target.html( $el )
+    @render_content(e, object)
+    @fire_callback(e, object)
 
   do_error: (e) =>
-    #message = $(e.target).attr('data-error-message')
-    #@error message if message
-    console.log 'error', e
+    console.log 'Ajax Render error', e
 
   get_flash_id: ->
     "flash_#{@flash_id++}"
 
-  get_ajax_target: (e,object) ->
-    object.target or $(e.target).attr('data-ajax-target') or $(e.target).parents('[data-ajax-target]').first().attr('data-ajax-target') or "\##{object.params.action}" 
+  get_ajax_target: (e, object) ->
+    object.target or @search_upward(e,'data-ajax-target') or "\##{object.params.action}" 
+
+  search_upward: (e, search) ->
+    $(e.target).attr(search) or $(e.target).parents("[#{search}]").first().attr(search)
+
+  render_content: (e, object) ->
+    $el = $(object.html)
+    $target = $( @get_ajax_target(e,object) )
+    $target.html( $el )
 
   render_flash: (flash, selector) =>
     $f = $(flash)
@@ -34,6 +39,9 @@ class AjaxRender
   
     setTimeout closeFunc, 5000
 
+  fire_callback: (e, object) ->
+    cb = eval(@search_upward(e, 'data-ajax-callback'))
+    cb(e, object)
 
 window.AjaxRender = AjaxRender
 
