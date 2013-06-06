@@ -43,7 +43,7 @@ class AjaxRender
 
   fire_callback: (e, object) ->
     cb = eval(@search_upward(e, 'data-ajax-callback'))
-    cb(e, object)
+    cb(e, object) if cb
 
 window.AjaxRender = AjaxRender
 
