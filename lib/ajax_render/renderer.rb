@@ -17,7 +17,8 @@ ActionController::Renderers.add :ajax do |obj, options|
               html:     render_to_string( obj ),
               flash:    flash.map { |f| render_to_string( :partial => 'shared/flash', :locals => { :name => f[0], :message => f[1] } ) },
               target:   options[:target],
-              params:   params
+              params:   params,
+              path:     request.original_fullpath
             }
   send_data output.to_json, :type => Mime::JSON
 end

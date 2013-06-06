@@ -9,9 +9,11 @@ class AjaxRender
 
   do_success: (e, object) =>
     console.log "Ajax Render success", e, object
+    window.history.pushState("", "", object.path );
     @render_flash flash, object.selector for flash in object.flash
     @render_content(e, object)
     @fire_callback(e, object)
+
 
   do_error: (e) =>
     console.log 'Ajax Render error', e
