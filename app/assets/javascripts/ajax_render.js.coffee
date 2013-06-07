@@ -1,19 +1,20 @@
 class AjaxRender
   constructor: ->
-    @register_events()
+    @register_events( $('body') )
     console.log "Ajax Render initialized"
 
-  register_events: ->
-    $('[data-remote=true]').on 'ajax:success', @do_success
-    $('[data-remote=true]').on 'ajax:error', @do_error
+  register_events: ( $el ) ->
+    $el.find('[data-remote=true]').on 'ajax:success', @do_success
+    $el.find('[data-remote=true]').on 'ajax:error', @do_error
 
   do_success: (e, object) =>
-    console.log "Ajax Render success", e, object
-    window.history.pushState("", "", object.path );
-    @render_flash flash, object.selector for flash in object.flash
-    @render_content(e, object)
-    @fire_callback(e, object)
-
+    if typeof object == 'object'
+      window.history.pushState("", "", object.path );
+      @render_flash flash, object.selector for flash in object.flash
+      @render_content(e, object)
+      @fire_callback(e, object)
+    if typeof object == 'string'
+      console.log "Ajax Render recieved a string, probably full page.  Is the it rendered by :ajax in the controller?", object
 
   do_error: (e) =>
     console.log 'Ajax Render error', e
@@ -31,6 +32,8 @@ class AjaxRender
     $el = $(object.html)
     $target = $( @get_ajax_target(e,object) )
     $target.html( $el )
+    @register_events($target)
+
 
   render_flash: (flash, selector) =>
     $f = $(flash)
