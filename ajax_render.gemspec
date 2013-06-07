@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name              = 'ajax_render'
-  s.version           = '0.0.8'
+  s.version           = '0.0.9'
   s.date              = '2013-05-31'
   s.platform          = Gem::Platform::RUBY
   s.authors           = ["Jeremy J Brenner"]
