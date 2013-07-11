@@ -12,13 +12,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License
 
-ActionController::Renderers.add :ajax do |obj, options|
+ActionController::Renderers.add :ajax do |obj, *args|
+  @in_ajax_render = true
+  options = args.extract_options!
+  Rails.logger.info [ obj, options ]
   output =  { 
-              html:     render_to_string( obj ),
+              html:     render_to_string( :action => obj, :layout => options[:layout] || false ),
               flash:    flash.map { |f| render_to_string( :partial => 'shared/flash', :locals => { :name => f[0], :message => f[1] } ) },
               target:   options[:target],
               params:   params,
               path:     request.original_fullpath
             }
+  @in_ajax_render = false      
   send_data output.to_json, :type => Mime::JSON
 end

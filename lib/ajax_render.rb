@@ -15,6 +15,7 @@
 require 'coffee-script'
 require 'ajax_render/renderer'
 require 'ajax_render/engine'
+require 'ajax_render/helpers'
 require 'ajax_render/version'
 
 module AjaxRender
@@ -27,3 +28,5 @@ module AjaxRender
 
 end
 
+
+ActionView::Base.send :include, AjaxRender::Helpers

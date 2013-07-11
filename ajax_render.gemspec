@@ -9,6 +9,8 @@ Gem::Specification.new do |s|
   s.description       = %q{Ajax render for rails 4}
   s.homepage          = 'http://github.com/jeremy-brenner/ajax_render'
 
+  s.add_dependency "coffee-script"
+
   # = MANIFEST =
   s.files = %w[
     README.md
