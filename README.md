@@ -28,9 +28,9 @@ add a format.js line in the respond_to for that controller action:
 
 Use the ajax_render helper in your view to get your content to the right place:
 
-= ajax_render :selector => "#css.selector" do 
-  %ul.nav.nav-pills
-    - @companies.each do |copmany|
-      %li= company.name
+    = ajax_render :selector => "#css.selector" do 
+      %ul.nav.nav-pills
+        - @companies.each do |copmany|
+          %li= company.name
 
 Outside of the :ajax renderer the ajax_render helper gets out of the way and doesn't mess with your view allowing you to use your views for both ajax rendering and standard rendering.
