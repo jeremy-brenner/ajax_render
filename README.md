@@ -22,8 +22,15 @@ add a format.js line in the respond_to for that controller action:
       @companies = Company.all
       respond_to do |format|
         format.html
-        format.js { render :ajax => '_company_list' }   # notice we specify the partial to avoid the entire template from rendering
+        format.js { render :ajax => '_company_list' }   
       end
     end
 
-ajax_render will look for the '#index' div to replace with the rendered content. You can override this by putting a data attribute on the link element or any of it's parent elements:  data-ajax-target = '#jquery-selector'
+Use the ajax_render helper in your view to get your content to the right place:
+
+= ajax_render :selector => "#css.selector" do 
+  %ul.nav.nav-pills
+    - @companies.each do |copmany|
+      %li= company.name
+
+Outside of the :ajax renderer the ajax_render helper gets out of the way and doesn't mess with your view allowing you to use your views for both ajax rendering and standard rendering.
