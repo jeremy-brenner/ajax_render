@@ -12,9 +12,7 @@ class AjaxRender
       @parse_html(object.html)
       @render_all()
       window.history.pushState("", "", object.path );
-      #@render_flash flash, object.selector for flash in object.flash
-      #@render_content(e, object)
-      #@fire_callback(e, object)
+      @render_flash flash, object.selector for flash in object.flash
 
   do_error: (e) =>
     console.log 'Ajax Render error', e
@@ -23,7 +21,9 @@ class AjaxRender
     "flash_#{@flash_id++}"
 
   parse_html: (html) ->
-    @$content = $( html ).filter('ajax_render').map (i,el) -> { html: el.children, opts: JSON.parse($(el).attr('data-ajax-options')) }
+    @$content = $( html ).filter('ajax_render')
+                         .add( $( html ).find('ajax_render') )
+                         .map (i,el) -> { html: el.children, opts: JSON.parse($(el).attr('data-ajax-options')) }
 
   render_all: ->
     @render_object(obj) for obj in @$content
